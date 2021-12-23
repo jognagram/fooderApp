@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fooder_app/models/explore_recipe.dart';
 import '../fooderlich_theme.dart';
 
 class Card1 extends StatelessWidget {
-  const Card1({Key? key}) : super(key: key);
+  const Card1({Key? key, required ExploreRecipe recipe}) : super(key: key);
 
   final String category = 'Editor\'s Choice';
   final String title = 'The Art of Dough';

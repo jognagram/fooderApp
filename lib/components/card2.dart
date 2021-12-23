@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fooder_app/components/author_card.dart';
 import 'package:fooder_app/fooderlich_theme.dart';
+import 'package:fooder_app/models/explore_recipe.dart';
 
 class Card2 extends StatelessWidget {
-  const Card2({Key? key}) : super(key: key);
+  const Card2({Key? key, required ExploreRecipe recipe}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class Card2 extends StatelessWidget {
         ),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/magazine_pics/mag5.png'),
+            image: AssetImage('assets/magazine_pics/mag2.png'),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.all(Radius.circular(10.0))

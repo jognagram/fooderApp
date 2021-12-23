@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fooder_app/components/card2.dart';
 import 'package:fooder_app/components/card3.dart';
+import 'package:fooder_app/screens/explore_screen.dart';
 
 import 'components/card1.dart';
 
@@ -16,9 +17,9 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   static List<Widget> pages = <Widget>[
-    const Card1(),
-    const Card2(),
-    const Card3(),
+    ExploreScreen(),
+    Container(color: Colors.green),
+    Container(color: Colors.blue,),
   ];
 
   void _onItemTapped(int index) {

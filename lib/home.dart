@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fooder_app/components/card2.dart';
 import 'package:fooder_app/components/card3.dart';
 import 'package:fooder_app/screens/explore_screen.dart';
+import 'package:fooder_app/screens/grocery_screen.dart';
+import 'package:fooder_app/screens/recipes_screens.dart';
+import 'package:provider/provider.dart';
 
 import 'components/card1.dart';
+import 'models/models.dart';
 
 
 class Home extends StatefulWidget {
@@ -18,8 +22,8 @@ class _HomeState extends State<Home> {
 
   static List<Widget> pages = <Widget>[
     ExploreScreen(),
-    Container(color: Colors.green),
-    Container(color: Colors.blue,),
+    RecipesScreen(),
+    GroceryScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -29,35 +33,40 @@ class _HomeState extends State<Home> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'FooderLich',
-          style: Theme.of(context).textTheme.headline6,
+    return Consumer<TabManager>(builder: (context, tabManager, child) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Fooderlich',
+            style: Theme.of(context).textTheme.headline6,
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Card',
-          ),
+        body: pages[tabManager.selectedTab],
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
 
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Card2',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Card3',
-          )
-        ],
-      ),
-      body: pages[_selectedIndex],
-    );
+          currentIndex: tabManager.selectedTab,
+          onTap: (index) {
+            tabManager.goTab(index);
+          },
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.explore),
+              label: 'Explore',
+            ),
+
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              label: 'recipes',
+            ),
+
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'To Buy'
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

@@ -28,7 +28,7 @@ class Card2 extends StatelessWidget {
             const AuthorCard(
                 authorName: 'Dan Erifried',
                 title: 'Smoothie Connoisseur',
-              imageProvider: AssetImage('assets/erd.jpg'),
+              imageProvider: AssetImage('assets/magazine_pics/erd.jpg'),
             ),
             //Positionned Text
             Expanded(

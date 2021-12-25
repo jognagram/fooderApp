@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fooder_app/models/models.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 
 class GroceryItemScreen extends StatefulWidget {
-
   final Function(GroceryItem) onCreate;
   final Function(GroceryItem) onUpdate;
   final GroceryItem? originalItem;
   final bool isUpdating;
-
   const GroceryItemScreen({
     Key? key,
     required this.onCreate,
     required this.onUpdate,
     this.originalItem,
-
   }) : isUpdating = (originalItem != null), super(key: key);
-
 
   @override
   _GroceryItemScreenState createState() => _GroceryItemScreenState();
@@ -32,6 +31,7 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
   int _currentSliderValue = 0;
 
   @override
+
   void initState() {
     super.initState();
 
@@ -40,7 +40,6 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
       _nameController.text = originalItem.name;
       _name = originalItem.name;
       _currentSliderValue = originalItem.quantity;
-      _importance = originalItem.importance;
       _currentColor = originalItem.color;
       final date = originalItem.date;
       _timeOfDay = TimeOfDay(hour: date.hour, minute: date.minute);
@@ -60,30 +59,30 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
   }
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-     appBar: AppBar(
-       actions: [
-         IconButton(onPressed: () {}, icon: const Icon(Icons.check)),
-       ],
-       elevation: 0.0,
-
-       title: Text(
-         'Grocery Item',
-         style: GoogleFonts.lato(fontWeight: FontWeight.w600),
-       ),
-       centerTitle: true,
-     ),
-
-     body: Container(
-       padding: const EdgeInsets.all(16.0),
-       child: ListView(
-         children: [
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {},
+          )
+        ],
+        elevation: 0.0,
+        title: Text('Grocery Item', style: GoogleFonts.lato(fontWeight: FontWeight.w600),),
+        centerTitle: true,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
             buildNameField(),
-           buildImportanceField(),
-         ],
-       ),
-     ),
-   );
+            buildImportanceField(),
+            buildDateField(context),
+            buildTimeField(context),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildNameField() {
@@ -99,7 +98,7 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
           controller: _nameController,
           cursorColor: _currentColor,
           decoration: InputDecoration(
-            hintText: 'E.g. Apples, Banana, 1 Bag of salt',
+            hintText: 'E.g. Apples, Banna, 1 Bag of salt',
             enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
             ),
@@ -107,7 +106,7 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
               borderSide: BorderSide(color: _currentColor),
             ),
             border: UnderlineInputBorder(
-              borderSide: BorderSide(color: _currentColor)
+              borderSide: BorderSide(color: _currentColor),
             )
           ),
         )
@@ -123,50 +122,106 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
           'Importance',
           style: GoogleFonts.lato(fontSize: 28.0),
         ),
-
         Wrap(
           spacing: 10.0,
           children: [
             ChoiceChip(
               selectedColor: Colors.black,
               selected: _importance == Importance.low,
-              label: const Text(
-                'low',
-                style: TextStyle(color: Colors.white),
-              ),
+              label: const Text('low', style: TextStyle(color: Colors.white),),
               onSelected: (selected) {
                 setState(() => _importance = Importance.low);
               },
-
             ),
 
             ChoiceChip(
               selectedColor: Colors.black,
               selected: _importance == Importance.medium,
-              label: const Text(
-                'medium',
-                style: TextStyle(color: Colors.white),
-              ),
+              label: const Text('medium', style: TextStyle(color: Colors.white),),
               onSelected: (selected) {
                 setState(() => _importance = Importance.medium);
               },
-
             ),
 
             ChoiceChip(
               selectedColor: Colors.black,
               selected: _importance == Importance.high,
-              label: const Text(
-                'high',
-                style: TextStyle(color: Colors.white),
-              ),
+              label: const Text('high', style: TextStyle(color: Colors.white),),
               onSelected: (selected) {
                 setState(() => _importance = Importance.high);
               },
-
-            )
+            ),
           ],
         )
+      ],
+    );
+  }
+
+  Widget buildDateField(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Date',
+              style: GoogleFonts.lato(fontSize: 28.0),
+            ),
+
+            TextButton(
+              child: const Text('Select'),
+              onPressed: () async {
+                final currentDate = DateTime.now();
+                final selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: currentDate,
+                  firstDate: currentDate,
+                  lastDate: DateTime(currentDate.year + 5),
+                );
+
+                setState(() {
+                  if (selectedDate != null) {
+                    _dueDate = selectedDate;
+                  }
+                });
+              },
+            )
+          ],
+        ),
+        Text('${DateFormat('yyyy-MM-dd').format(_dueDate)}'),
+      ],
+    );
+  }
+
+  Widget buildTimeField(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Time Of Day',
+              style: GoogleFonts.lato(fontSize: 28.0),
+            ),
+            TextButton(
+              child: const Text('Select'),
+              onPressed: () async {
+                final timeOfDay = await showTimePicker(
+                  initialTime: TimeOfDay.now(),
+                  context: context,
+                );
+                setState(() {
+                  if (timeOfDay != null) {
+                    _timeOfDay = timeOfDay;
+                  }
+                });
+              },
+            )
+          ],
+        ),
+        Text('${_timeOfDay.format(context)}')
       ],
     );
   }

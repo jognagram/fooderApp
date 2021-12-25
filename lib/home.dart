@@ -40,6 +40,7 @@ class _HomeState extends State<Home> {
             'Fooderlich',
             style: Theme.of(context).textTheme.headline6,
           ),
+          centerTitle: true,
         ),
         body: pages[tabManager.selectedTab],
         bottomNavigationBar: BottomNavigationBar(

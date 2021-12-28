@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
           ),
           centerTitle: true,
         ),
-        body: pages[tabManager.selectedTab],
+        body:  IndexedStack(index: tabManager.selectedTab, children: pages,),
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
 
@@ -50,18 +50,18 @@ class _HomeState extends State<Home> {
           onTap: (index) {
             tabManager.goTab(index);
           },
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
+          items: const <BottomNavigationBarItem>[
+             BottomNavigationBarItem(
               icon: Icon(Icons.explore),
               label: 'Explore',
             ),
 
-            const BottomNavigationBarItem(
+             BottomNavigationBarItem(
               icon: Icon(Icons.book),
               label: 'recipes',
             ),
 
-            const BottomNavigationBarItem(
+             BottomNavigationBarItem(
               icon: Icon(Icons.list),
               label: 'To Buy'
             ),

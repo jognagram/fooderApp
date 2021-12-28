@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:fooder_app/models/models.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -76,9 +77,16 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
         child: ListView(
           children: [
             buildNameField(),
+            const SizedBox(height: 10.0,),
             buildImportanceField(),
+            const SizedBox(height: 10.0,),
             buildDateField(context),
+            const SizedBox(height: 10.0,),
             buildTimeField(context),
+            const SizedBox(height: 10.0,),
+            buildColorPicker(context),
+            const SizedBox(height: 10.0,),
+            buildQuantityField(),
           ],
         ),
       ),
@@ -221,8 +229,57 @@ class _GroceryItemScreenState extends State<GroceryItemScreen> {
             )
           ],
         ),
-        Text('${_timeOfDay.format(context)}')
+        Text('${_timeOfDay.format(context)}'),
       ],
     );
+  }
+
+  Widget buildColorPicker(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 50.0,
+              width: 10.0,
+              color: _currentColor,
+            ),
+            const SizedBox(height: 8.0,),
+            Text(
+              'Color',
+              style: GoogleFonts.lato(fontSize: 28.0),
+            ),
+          ],
+        ),
+        TextButton(
+          child: const Text('Select'),
+          onPressed: () {
+            showDialog(context: context, builder: (context) {
+              return AlertDialog(
+                content: BlockPicker(
+                  pickerColor: Colors.white,
+                  onColorChanged: (color) {
+                    setState(() => _currentColor = color);
+                  },
+                ),
+                actions: [
+                  TextButton(
+                    child: const Text('Save'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+          },
+        )
+      ],
+    );
+  }
+
+  Widget buildQuantityField() {
+    return Column();
   }
 }
